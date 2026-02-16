@@ -1,0 +1,166 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../lib/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+/// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
+model bookings {
+  booking_id                        Int             @id @default(autoincrement())
+  resource_id                       Int
+  user_id                           Int
+  start_datetime                    DateTime        @db.Timestamp(6)
+  end_datetime                      DateTime        @db.Timestamp(6)
+  status                            booking_status? @default(pending)
+  approver_id                       Int?
+  created_at                        DateTime?       @default(now()) @db.Timestamp(6)
+  approved_at                       DateTime?       @db.Timestamp(6)
+  users_bookings_approver_idTousers users?          @relation("bookings_approver_idTousers", fields: [approver_id], references: [user_id], onDelete: NoAction, onUpdate: NoAction)
+  resources                         resources       @relation(fields: [resource_id], references: [resource_id], onDelete: NoAction, onUpdate: NoAction)
+  users_bookings_user_idTousers     users           @relation("bookings_user_idTousers", fields: [user_id], references: [user_id], onDelete: NoAction, onUpdate: NoAction)
+
+  @@index([end_datetime], map: "idx_bookings_end")
+  @@index([resource_id], map: "idx_bookings_resource")
+  @@index([start_datetime], map: "idx_bookings_start")
+}
+
+model buildings {
+  building_id     Int         @id @default(autoincrement())
+  building_name   String      @db.VarChar(100)
+  building_number String      @unique @db.VarChar(50)
+  total_floors    Int
+  is_active       Boolean?    @default(true)
+  created_at      DateTime?   @default(now()) @db.Timestamp(6)
+  resources       resources[]
+}
+
+model cupboards {
+  cupboard_id   Int       @id @default(autoincrement())
+  resource_id   Int
+  cupboard_name String    @db.VarChar(100)
+  total_shelves Int
+  resources     resources @relation(fields: [resource_id], references: [resource_id], onDelete: NoAction, onUpdate: NoAction)
+  shelves       shelves[]
+}
+
+model facility_master {
+  facility_id         Int                   @id @default(autoincrement())
+  facility_name       String                @unique @db.VarChar(100)
+  resource_facilities resource_facilities[]
+}
+
+model maintenance {
+  maintenance_id   Int                 @id @default(autoincrement())
+  resource_id      Int
+  maintenance_type String              @db.VarChar(100)
+  scheduled_date   DateTime            @db.Date
+  status           maintenance_status? @default(scheduled)
+  notes            String?
+  created_at       DateTime?           @default(now()) @db.Timestamp(6)
+  created_by       Int?
+  completed_by     Int?
+  completed_at     DateTime?           @db.Timestamp(6)
+  resources        resources           @relation(fields: [resource_id], references: [resource_id], onDelete: NoAction, onUpdate: NoAction)
+  users_maintenance_created_byTousers   users? @relation("maintenance_created_byTousers", fields: [created_by], references: [user_id], onDelete: NoAction, onUpdate: NoAction)
+  users_maintenance_completed_byTousers users? @relation("maintenance_completed_byTousers", fields: [completed_by], references: [user_id], onDelete: NoAction, onUpdate: NoAction)
+
+  @@index([scheduled_date], map: "idx_maintenance_date")
+}
+
+model resource_facilities {
+  resource_id     Int
+  facility_id     Int
+  facility_master facility_master @relation(fields: [facility_id], references: [facility_id], onDelete: NoAction, onUpdate: NoAction)
+  resources       resources       @relation(fields: [resource_id], references: [resource_id], onDelete: NoAction, onUpdate: NoAction)
+
+  @@id([resource_id, facility_id])
+}
+
+model resource_types {
+  resource_type_id Int         @id @default(autoincrement())
+  type_name        String      @unique @db.VarChar(100)
+  resources        resources[]
+}
+
+model resources {
+  resource_id         Int                   @id @default(autoincrement())
+  resource_name       String                @db.VarChar(100)
+  resource_type_id    Int
+  building_id         Int
+  floor_number        Int
+  capacity            Int?
+  description         String?
+  is_active           Boolean?              @default(true)
+  created_at          DateTime?             @default(now()) @db.Timestamp(6)
+  updated_at          DateTime?             @default(now()) @db.Timestamp(6)
+  bookings            bookings[]
+  cupboards           cupboards[]
+  maintenance         maintenance[]
+  resource_facilities resource_facilities[]
+  buildings           buildings             @relation(fields: [building_id], references: [building_id], onDelete: NoAction, onUpdate: NoAction, map: "fk_building")
+  resource_types      resource_types        @relation(fields: [resource_type_id], references: [resource_type_id], onDelete: NoAction, onUpdate: NoAction, map: "fk_resource_type")
+
+  @@unique([resource_name, building_id], map: "unique_resource_per_building")
+}
+
+model shelves {
+  shelf_id     Int       @id @default(autoincrement())
+  cupboard_id  Int
+  shelf_number Int
+  capacity     Int?
+  description  String?
+  cupboards    cupboards @relation(fields: [cupboard_id], references: [cupboard_id], onDelete: NoAction, onUpdate: NoAction)
+
+  @@unique([cupboard_id, shelf_number])
+}
+
+model users {
+  user_id                              Int        @id @default(autoincrement())
+  name                                 String     @db.VarChar(100)
+  email                                String     @unique @db.VarChar(100)
+  role                                 user_role
+  password                             String     @db.VarChar(255)
+  is_active                            Boolean?   @default(true)
+  created_at                           DateTime?  @default(now()) @db.Timestamp(6)
+  updated_at                           DateTime?  @default(now()) @db.Timestamp(6)
+  birthdate                            DateTime?  @default(dbgenerated("'2000-01-01'::date")) @db.Date
+  bookings_bookings_approver_idTousers bookings[] @relation("bookings_approver_idTousers")
+  bookings_bookings_user_idTousers     bookings[] @relation("bookings_user_idTousers")
+  maintenance_maintenance_created_byTousers   maintenance[] @relation("maintenance_created_byTousers")
+  maintenance_maintenance_completed_byTousers maintenance[] @relation("maintenance_completed_byTousers")
+  notifications                               notifications[]
+}
+
+model notifications {
+  notification_id Int      @id @default(autoincrement())
+  user_id         Int
+  title           String   @db.VarChar(255)
+  message         String   @db.Text
+  type            String   @default("info") @db.VarChar(50)
+  is_read         Boolean  @default(false)
+  created_at      DateTime @default(now()) @db.Timestamp(6)
+  users           users    @relation(fields: [user_id], references: [user_id], onDelete: Cascade)
+}
+
+enum booking_status {
+  pending
+  approved
+  rejected
+}
+
+enum maintenance_status {
+  scheduled
+  completed
+  cancelled
+}
+
+enum user_role {
+  admin
+  user
+  approver
+  maintenance
+}
