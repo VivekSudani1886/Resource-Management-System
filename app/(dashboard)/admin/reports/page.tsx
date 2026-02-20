@@ -1,4 +1,5 @@
-import { fetchDetailedReportStats } from '@/app/lib/report-actions';
+import { Suspense } from 'react';
+import { fetchDetailedReportStats, fetchResourceUtilization } from '@/app/lib/report-actions';
 import { ChartBarIcon, StarIcon, CheckBadgeIcon, WrenchScrewdriverIcon } from '@heroicons/react/24/outline'; // Adjust for your icon set
 
 async function ReportStats() {
@@ -78,7 +79,7 @@ async function UtilizationTable() {
                         </tr>
                     </thead>
                     <tbody>
-                        {data.map((item, i) => (
+                        {data.map((item: { name: string; type: string; usage: number }, i: number) => (
                             <tr key={i} className="border-b border-border/50 hover:bg-muted/20 transition-colors last:border-0">
                                 <td className="px-4 py-3 font-medium">{item.name}</td>
                                 <td className="px-4 py-3">{item.type}</td>

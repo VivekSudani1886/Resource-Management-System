@@ -133,8 +133,9 @@ export async function deleteUser(id: number) {
             where: { user_id: id },
         });
         revalidatePath('/admin/users');
+        return { success: true, message: 'User deleted successfully.' };
     } catch (error) {
-        return { message: 'Database Error: Failed to Delete User.' };
+        return { success: false, message: 'Database Error: Failed to Delete User.' };
     }
 }
 

@@ -184,8 +184,9 @@ export async function approveBooking(id: number) {
 
         revalidatePath('/approver/approvals');
         revalidatePath('/approver');
+        return { success: true, message: 'Booking approved successfully.' };
     } catch (error) {
-        return { message: 'Database Error: Failed to Approve Booking.' };
+        return { success: false, message: 'Database Error: Failed to Approve Booking.' };
     }
 }
 
@@ -221,8 +222,9 @@ export async function rejectBooking(id: number) {
 
         revalidatePath('/approver/approvals');
         revalidatePath('/approver');
+        return { success: true, message: 'Booking rejected successfully.' };
     } catch (error) {
-        return { message: 'Database Error: Failed to Reject Booking.' };
+        return { success: false, message: 'Database Error: Failed to Reject Booking.' };
     }
 }
 export async function fetchAllBookings(query?: string) {

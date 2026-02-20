@@ -7,7 +7,9 @@ import {
     ClipboardList,
     Wrench,
     BarChart3,
-    X
+    X,
+    Users,
+    History
 } from 'lucide-react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
@@ -17,17 +19,42 @@ import { Button } from '@/app/ui/button';
 
 // Links configuration
 const links = [
-    { name: 'Dashboard', href: '/dashboard', icon: LayoutDashboard },
-    { name: 'Resources', href: '/dashboard/resources', icon: Box },
-    { name: 'Bookings', href: '/dashboard/bookings', icon: CalendarCheck },
-    { name: 'Approvals', href: '/dashboard/approvals', icon: ClipboardList },
-    { name: 'Maintenance', href: '/dashboard/maintenance', icon: Wrench },
-    { name: 'Reports', href: '/dashboard/reports', icon: BarChart3 },
+    { name: 'Dashboard', href: '/overview', icon: LayoutDashboard },
+    { name: 'Resources', href: '/admin/resources', icon: Box },
+    { name: 'Resources', href: '/user/resources', icon: Box },
+    { name: 'Users', href: '/admin/users', icon: Users },
+    { name: 'My Bookings', href: '/user/bookings', icon: CalendarCheck },
+    { name: 'All Bookings', href: '/admin/bookings', icon: CalendarCheck },
+    { name: 'Approvals', href: '/admin/approvals', icon: ClipboardList },
+    { name: 'Approvals', href: '/approver/approvals', icon: ClipboardList },
+    { name: 'History', href: '/approver/history', icon: History },
+    { name: 'Maintenance', href: '/admin/maintenance', icon: Wrench },
+    { name: 'My Tasks', href: '/maintenance/maintenance', icon: Wrench },
+    { name: 'Resources', href: '/maintenance/resources', icon: Box },
+    { name: 'History', href: '/maintenance/history', icon: History },
+    { name: 'Reports', href: '/admin/reports', icon: BarChart3 },
 ];
 
-export default function MobileMenu() {
+export default function MobileMenu({ role }: { role: string }) {
     const pathname = usePathname();
     const { isMobileOpen, setMobileOpen } = useSidebar();
+
+    // Determine roles for filtering
+    const isAdmin = role === 'admin';
+    const isUser = role === 'user';
+    const isApprover = role === 'approver';
+    const isMaintenance = role === 'maintenance';
+
+    // Filter links based on passed role
+    const filteredLinks = links.filter((link) => {
+        if (link.href === '/overview') return true;
+
+        if (isAdmin) return link.href.startsWith('/admin');
+        if (isUser) return link.href.startsWith('/user');
+        if (isApprover) return link.href.startsWith('/approver');
+        if (isMaintenance) return link.href.startsWith('/maintenance');
+        return false;
+    });
 
     if (!isMobileOpen) return null;
 
@@ -57,13 +84,22 @@ export default function MobileMenu() {
 
                 {/* Links */}
                 <nav className="flex flex-col p-2">
-                    {links.map((link) => {
+                    {filteredLinks.map((link) => {
                         const LinkIcon = link.icon;
-                        const isActive = pathname === link.href;
+                        let href = link.href;
+
+                        // Dynamic Dashboard Link
+                        if (link.href === '/overview') {
+                            if (isAdmin) href = '/admin';
+                            else if (isUser) href = '/user';
+                            else if (isApprover) href = '/approver';
+                            else if (isMaintenance) href = '/maintenance';
+                        }
+                        const isActive = pathname === href;
                         return (
                             <Link
-                                key={link.name}
-                                href={link.href}
+                                key={`${link.name}-${href}`}
+                                href={href}
                                 onClick={() => setMobileOpen(false)}
                                 className={cn(
                                     "flex items-center gap-4 rounded-xl px-4 py-3 text-sm font-medium transition-all duration-200",

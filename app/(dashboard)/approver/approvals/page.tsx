@@ -39,13 +39,19 @@ export default async function Page() {
 
                                 <div className="flex gap-2 w-full md:w-auto">
                                     <BookingDetailsModal booking={booking as any} iconOnly />
-                                    <form action={approveBooking.bind(null, booking.booking_id)} className="w-full md:w-auto">
+                                    <form action={async () => {
+                                        "use server";
+                                        await approveBooking(booking.booking_id);
+                                    }} className="w-full md:w-auto">
                                         <Button type="submit" className="w-full md:w-auto bg-green-600 hover:bg-green-700 text-white gap-2">
                                             <CheckCircleIcon className="h-4 w-4" />
                                             Approve
                                         </Button>
                                     </form>
-                                    <form action={rejectBooking.bind(null, booking.booking_id)} className="w-full md:w-auto">
+                                    <form action={async () => {
+                                        "use server";
+                                        await rejectBooking(booking.booking_id);
+                                    }} className="w-full md:w-auto">
                                         <Button type="submit" variant="destructive" className="w-full md:w-auto gap-2 bg-red-600 hover:bg-red-700">
                                             <XCircleIcon className="h-4 w-4" />
                                             Reject

@@ -12,7 +12,7 @@ export default async function Layout({ children }: { children: React.ReactNode }
         <SidebarProvider>
             <div className="flex h-screen overflow-hidden bg-background">
                 {/* Sidebar - Wrapped for collapse state */}
-                <SidebarWrapper>
+                <SidebarWrapper role={userRole}>
                     <SideNav role={userRole} />
                 </SidebarWrapper>
 

@@ -13,7 +13,7 @@ export default function SideNav({ role }: { role: string }) {
         <div className="flex h-full flex-col border-r bg-card/50 backdrop-blur-xl relative">
             <Link
                 className={cn("flex h-16 items-center border-b bg-background/50 transition-all duration-300 overflow-hidden", isCollapsed ? "justify-center px-0" : "px-6")}
-                href="/dashboard"
+                href="/overview"
             >
                 <div className="flex items-center gap-2 font-bold text-xl text-primary">
                     <div className="h-8 w-8 min-w-[2rem] rounded-lg bg-primary flex items-center justify-center text-primary-foreground shadow-lg shadow-primary/20">

@@ -87,7 +87,7 @@ export async function resetPassword(prevState: any, formData: FormData) {
 
     if (!result.success) {
         // Return first error message
-        return result.error.errors[0]?.message || 'Invalid input';
+        return result.error.issues[0]?.message || 'Invalid input';
     }
 
     const { token, password } = result.data;

@@ -37,13 +37,13 @@ export default function Header({ user }: { user: any }) {
             </div>
 
             <div className="flex items-center gap-4">
-                {/* Search Bar - Visual Only */}
-                <div className="relative hidden md:block">
-                    <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
+                {/* Search Bar - Modern & Responsive */}
+                <div className="relative hidden md:block group">
+                    <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground group-focus-within:text-primary transition-colors" />
                     <input
                         type="text"
-                        placeholder="Search..."
-                        className="h-9 w-64 rounded-full border border-border bg-background px-9 py-2 text-sm outline-none placeholder:text-muted-foreground focus:border-primary focus:ring-1 focus:ring-primary transition-all"
+                        placeholder="Search resources..."
+                        className="h-10 w-64 rounded-xl border border-border/50 bg-background/50 px-10 py-2 text-sm outline-none placeholder:text-muted-foreground focus:w-80 focus:bg-background focus:border-primary/50 focus:ring-4 focus:ring-primary/10 transition-all duration-300"
                     />
                 </div>
 

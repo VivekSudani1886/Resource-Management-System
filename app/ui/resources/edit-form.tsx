@@ -7,7 +7,7 @@ import { useActionState } from 'react';
 
 export default function EditResourceForm({ resource, buildings, types }: { resource: any; buildings: any[]; types: any[] }) {
     const updateResourceWithId = updateResource.bind(null, resource.resource_id);
-    const initialState = { message: '', errors: {} };
+    const initialState = { message: '', success: false, errors: {} };
     const [state, dispatch] = useActionState(updateResourceWithId, initialState);
 
     return (

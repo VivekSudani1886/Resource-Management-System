@@ -5,7 +5,7 @@ import { cn } from '@/lib/utils';
 import { ReactNode } from 'react';
 import MobileMenu from '@/app/ui/dashboard/mobile-menu';
 
-export default function SidebarWrapper({ children }: { children: ReactNode }) {
+export default function SidebarWrapper({ children, role }: { children: ReactNode; role: string }) {
     const { isCollapsed } = useSidebar();
 
     return (
@@ -21,7 +21,7 @@ export default function SidebarWrapper({ children }: { children: ReactNode }) {
             </div>
 
             {/* Mobile Menu (Floating Card) */}
-            <MobileMenu />
+            <MobileMenu role={role} />
         </>
     );
 }
