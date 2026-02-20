@@ -99,10 +99,10 @@ async function DashboardContent() {
                                         </div>
                                         <div className="ml-4 text-right">
                                             <span className={`inline-flex items-center rounded-md px-2.5 py-0.5 text-xs font-medium border border-transparent shadow-sm ${booking.status === 'approved' ? 'bg-green-600 text-white dark:bg-green-900 dark:text-green-100' :
-                                                    booking.status === 'rejected' ? 'bg-red-600 text-white dark:bg-red-900 dark:text-red-100' :
-                                                        'bg-yellow-600 text-white dark:bg-yellow-900 dark:text-yellow-100'
+                                                booking.status === 'rejected' ? 'bg-red-600 text-white dark:bg-red-900 dark:text-red-100' :
+                                                    'bg-yellow-600 text-white dark:bg-yellow-900 dark:text-yellow-100'
                                                 }`}>
-                                                {booking.status.charAt(0).toUpperCase() + booking.status.slice(1)}
+                                                {(booking.status || 'pending').charAt(0).toUpperCase() + (booking.status || 'pending').slice(1)}
                                             </span>
                                             <p className="text-xs text-muted-foreground mt-1">
                                                 {booking.created_at ? new Date(booking.created_at).toLocaleDateString() : '-'}

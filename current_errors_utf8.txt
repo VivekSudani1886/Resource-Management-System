@@ -1,0 +1,35 @@
+﻿app/(dashboard)/admin/resources/[id]/page.tsx(26,27): error TS2322: Type '() => Promise<{ message: string; success?: undefined; } | { success: boolean; message: string; }>' is not assignable to type 'string | ((formData: FormData) => void | Promise<void>) | undefined'.
+  Type '() => Promise<{ message: string; success?: undefined; } | { success: boolean; message: string; }>' is not assignable to type '(formData: FormData) => void | Promise<void>'.
+    Type 'Promise<{ message: string; success?: undefined; } | { success: boolean; message: string; }>' is not assignable to type 'void | Promise<void>'.
+      Type 'Promise<{ message: string; success?: undefined; } | { success: boolean; message: string; }>' is not assignable to type 'Promise<void>'.
+        Type '{ message: string; success?: undefined; } | { success: boolean; message: string; }' is not assignable to type 'void'.
+          Type '{ message: string; success?: undefined; }' is not assignable to type 'void'.
+app/(dashboard)/approver/approvals/page.tsx(42,43): error TS2322: Type '() => Promise<{ message: string; } | undefined>' is not assignable to type 'string | ((formData: FormData) => void | Promise<void>) | undefined'.
+  Type '() => Promise<{ message: string; } | undefined>' is not assignable to type '(formData: FormData) => void | Promise<void>'.
+    Type 'Promise<{ message: string; } | undefined>' is not assignable to type 'void | Promise<void>'.
+      Type 'Promise<{ message: string; } | undefined>' is not assignable to type 'Promise<void>'.
+        Type '{ message: string; } | undefined' is not assignable to type 'void'.
+          Type '{ message: string; }' is not assignable to type 'void'.
+app/(dashboard)/approver/approvals/page.tsx(48,43): error TS2322: Type '() => Promise<{ message: string; } | undefined>' is not assignable to type 'string | ((formData: FormData) => void | Promise<void>) | undefined'.
+  Type '() => Promise<{ message: string; } | undefined>' is not assignable to type '(formData: FormData) => void | Promise<void>'.
+    Type 'Promise<{ message: string; } | undefined>' is not assignable to type 'void | Promise<void>'.
+      Type 'Promise<{ message: string; } | undefined>' is not assignable to type 'Promise<void>'.
+        Type '{ message: string; } | undefined' is not assignable to type 'void'.
+          Type '{ message: string; }' is not assignable to type 'void'.
+app/lib/password-actions.ts(90,29): error TS2339: Property 'errors' does not exist on type 'ZodError<{ token: string; password: string; confirmPassword: string; }>'.
+app/ui/resources/create-form.tsx(17,20): error TS2339: Property 'success' does not exist on type '{ errors: { resource_name?: string[] | undefined; building_id?: string[] | undefined; resource_type_id?: string[] | undefined; floor_number?: string[] | undefined; capacity?: string[] | undefined; description?: string[] | undefined; is_active?: string[] | undefined; }; message: string; } | { ...; }'.
+  Property 'success' does not exist on type '{ errors: { resource_name?: string[] | undefined; building_id?: string[] | undefined; resource_type_id?: string[] | undefined; floor_number?: string[] | undefined; capacity?: string[] | undefined; description?: string[] | undefined; is_active?: string[] | undefined; }; message: string; }'.
+app/ui/resources/create-form.tsx(22,46): error TS2339: Property 'success' does not exist on type '{ errors: { resource_name?: string[] | undefined; building_id?: string[] | undefined; resource_type_id?: string[] | undefined; floor_number?: string[] | undefined; capacity?: string[] | undefined; description?: string[] | undefined; is_active?: string[] | undefined; }; message: string; } | { ...; }'.
+  Property 'success' does not exist on type '{ errors: { resource_name?: string[] | undefined; building_id?: string[] | undefined; resource_type_id?: string[] | undefined; floor_number?: string[] | undefined; capacity?: string[] | undefined; description?: string[] | undefined; is_active?: string[] | undefined; }; message: string; }'.
+app/ui/resources/resource-grid.tsx(83,35): error TS2322: Type '() => Promise<{ message: string; success?: undefined; } | { success: boolean; message: string; }>' is not assignable to type 'string | ((formData: FormData) => void | Promise<void>) | undefined'.
+  Type '() => Promise<{ message: string; success?: undefined; } | { success: boolean; message: string; }>' is not assignable to type '(formData: FormData) => void | Promise<void>'.
+    Type 'Promise<{ message: string; success?: undefined; } | { success: boolean; message: string; }>' is not assignable to type 'void | Promise<void>'.
+      Type 'Promise<{ message: string; success?: undefined; } | { success: boolean; message: string; }>' is not assignable to type 'Promise<void>'.
+        Type '{ message: string; success?: undefined; } | { success: boolean; message: string; }' is not assignable to type 'void'.
+          Type '{ message: string; success?: undefined; }' is not assignable to type 'void'.
+app/ui/users/table.tsx(78,51): error TS2322: Type '() => Promise<{ message: string; } | undefined>' is not assignable to type 'string | ((formData: FormData) => void | Promise<void>) | undefined'.
+  Type '() => Promise<{ message: string; } | undefined>' is not assignable to type '(formData: FormData) => void | Promise<void>'.
+    Type 'Promise<{ message: string; } | undefined>' is not assignable to type 'void | Promise<void>'.
+      Type 'Promise<{ message: string; } | undefined>' is not assignable to type 'Promise<void>'.
+        Type '{ message: string; } | undefined' is not assignable to type 'void'.
+          Type '{ message: string; }' is not assignable to type 'void'.

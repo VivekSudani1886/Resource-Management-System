@@ -27,8 +27,8 @@ export default async function ResourceGrid({ query }: { query: string }) {
                                 <Box className="h-6 w-6" />
                             </div>
                             <span className={`px-2.5 py-1 rounded-md text-xs font-medium border shadow-sm ${resource.is_active
-                                    ? 'bg-green-600 text-white border-transparent'
-                                    : 'bg-red-600 text-white border-transparent'
+                                ? 'bg-green-600 text-white border-transparent'
+                                : 'bg-red-600 text-white border-transparent'
                                 }`}>
                                 {resource.is_active ? 'Active' : 'Inactive'}
                             </span>
@@ -80,7 +80,10 @@ export default async function ResourceGrid({ query }: { query: string }) {
                                 <PencilIcon className="h-4 w-4" />
                                 Edit
                             </Link>
-                            <form action={deleteResource.bind(null, resource.resource_id)}>
+                            <form action={async () => {
+                                "use server";
+                                await deleteResource(resource.resource_id);
+                            }}>
                                 <button
                                     type="submit"
                                     className="inline-flex h-9 w-9 items-center justify-center rounded-lg border border-input bg-background text-sm font-medium shadow-sm transition-colors hover:bg-red-50 hover:text-red-600 hover:border-red-200 dark:hover:bg-red-900/30 dark:hover:text-red-400"

@@ -15,6 +15,7 @@ const ResourceSchema = z.object({
     is_active: z.string().optional(),
 });
 
+
 const CreateResource = ResourceSchema;
 const UpdateResource = ResourceSchema.partial();
 
@@ -93,6 +94,7 @@ export async function createResource(prevState: any, formData: FormData) {
 
     if (!validatedFields.success) {
         return {
+            success: false,
             errors: validatedFields.error.flatten().fieldErrors,
             message: 'Missing Fields. Failed to Create Resource.',
         };
@@ -116,6 +118,7 @@ export async function createResource(prevState: any, formData: FormData) {
     } catch (error) {
         console.error(error);
         return {
+            success: false,
             message: 'Database Error: Failed to Create Resource.',
         };
     }
@@ -137,6 +140,7 @@ export async function updateResource(id: number, prevState: any, formData: FormD
 
     if (!validatedFields.success) {
         return {
+            success: false,
             errors: validatedFields.error.flatten().fieldErrors,
             message: 'Missing Fields. Failed to Update Resource.',
         };
@@ -159,7 +163,7 @@ export async function updateResource(id: number, prevState: any, formData: FormD
             },
         });
     } catch (error) {
-        return { message: 'Database Error: Failed to Update Resource.' };
+        return { success: false, message: 'Database Error: Failed to Update Resource.' };
     }
 
     revalidatePath('/admin/resources');
@@ -173,7 +177,7 @@ export async function deleteResource(id: number) {
         });
         revalidatePath('/admin/resources');
     } catch (error) {
-        return { message: 'Database Error: Failed to Delete Resource.' };
+        return { success: false, message: 'Database Error: Failed to Delete Resource.' };
     }
     revalidatePath('/admin/resources');
     return { success: true, message: 'Resource deleted successfully!' };

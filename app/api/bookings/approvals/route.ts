@@ -1,5 +1,5 @@
 import { auth } from '@/auth';
-import { prisma } from '@/lib/prisma';
+import { Prisma as prisma } from '@/app/lib/prisma';
 import { NextResponse } from 'next/server';
 
 export async function PUT(req: Request) {

@@ -36,7 +36,7 @@ export default async function Page() {
                                             booking.status === 'rejected' ? 'bg-red-600 text-white dark:bg-red-900 dark:text-red-100' :
                                                 'bg-yellow-600 text-white dark:bg-yellow-900 dark:text-yellow-100'
                                             }`}>
-                                            {booking.status.charAt(0).toUpperCase() + booking.status.slice(1)}
+                                            {(booking.status || 'pending').charAt(0).toUpperCase() + (booking.status || 'pending').slice(1)}
                                         </span>
                                     </td>
                                     <td className="px-6 py-4">

@@ -23,7 +23,10 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
                             <PencilIcon className="w-4 h-4" /> <span className="hidden sm:inline">Edit</span>
                         </Button>
                     </Link>
-                    <form action={deleteResource.bind(null, resourceId)}>
+                    <form action={async () => {
+                        "use server";
+                        await deleteResource(resourceId);
+                    }}>
                         <Button variant="destructive" className="flex items-center gap-2">
                             <TrashIcon className="w-4 h-4" /> <span className="hidden sm:inline">Delete</span>
                         </Button>

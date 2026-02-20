@@ -75,7 +75,10 @@ export default async function UsersTable({ query }: { query: string }) {
                                             >
                                                 <PencilIcon className="w-4 h-4" />
                                             </Link>
-                                            <form action={deleteUser.bind(null, user.user_id)}>
+                                            <form action={async () => {
+                                                "use server";
+                                                await deleteUser(user.user_id);
+                                            }}>
                                                 <button
                                                     className="group inline-flex h-8 w-8 items-center justify-center rounded-md hover:bg-destructive/10 text-muted-foreground hover:text-destructive transition-colors"
                                                     title="Delete User"

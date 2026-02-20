@@ -10,7 +10,7 @@ const MaintenanceSchema = z.object({
     resource_id: z.coerce.number().min(1, 'Resource is required'),
     maintenance_type: z.string().min(1, 'Maintenance Type is required'),
     scheduled_date: z.string().or(z.date()).transform((val) => new Date(val)),
-    notes: z.string().optional(),
+    notes: z.string().nullable().optional(),
     status: z.enum(['scheduled', 'completed', 'cancelled']).optional(),
 });
 
@@ -50,7 +50,7 @@ export async function fetchMaintenanceStats() {
     }
 }
 
-export async function createMaintenanceRequest(prevState: any, formData: FormData) {
+export async function createMaintenanceRequest(prevState: any, formData?: FormData) {
     const session = await auth();
     const userEmail = session?.user?.email;
 
@@ -61,12 +61,19 @@ export async function createMaintenanceRequest(prevState: any, formData: FormDat
     const user = await prisma.users.findUnique({ where: { email: userEmail } });
     if (!user) return { message: 'User not found' };
 
+    // Handle both (prevState, formData) and (formData) signatures
+    const actualFormData = formData instanceof FormData ? formData : (prevState instanceof FormData ? prevState : null);
+
+    if (!actualFormData) {
+        return { message: 'Invalid form data' };
+    }
+
     const rawFormData = {
-        resource_id: formData.get('resource_id'),
-        maintenance_type: formData.get('maintenance_type'),
-        scheduled_date: formData.get('scheduled_date'),
-        notes: formData.get('notes'),
-        status: formData.get('status') || 'scheduled',
+        resource_id: actualFormData.get('resource_id'),
+        maintenance_type: actualFormData.get('maintenance_type'),
+        scheduled_date: actualFormData.get('scheduled_date'),
+        notes: actualFormData.get('notes') || undefined,
+        status: actualFormData.get('status') || 'scheduled',
     };
 
     const validatedFields = CreateMaintenance.safeParse(rawFormData);
