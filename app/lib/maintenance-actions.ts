@@ -34,9 +34,31 @@ export async function fetchMaintenanceRequests() {
         return requests;
     } catch (error) {
         console.error('Database Error:', error);
-        throw new Error('Failed to fetch maintenance requests.');
+        return [];
     }
 }
+
+export async function fetchResourcesUnderMaintenance() {
+    try {
+        const resources = await prisma.resources.findMany({
+            where: { is_active: false },
+            include: {
+                buildings: true,
+                resource_types: true,
+                maintenance: {
+                    where: { status: 'scheduled' },
+                    orderBy: { scheduled_date: 'desc' },
+                    take: 1,
+                },
+            },
+        });
+        return resources;
+    } catch (error) {
+        console.error('Database Error:', error);
+        return [];
+    }
+}
+
 
 export async function fetchMaintenanceStats() {
     try {
@@ -46,7 +68,7 @@ export async function fetchMaintenanceStats() {
         return { total, scheduled, completed };
     } catch (error) {
         console.error('Database Error:', error);
-        throw new Error('Failed to fetch maintenance stats.');
+        return { total: 0, scheduled: 0, completed: 0 };
     }
 }
 
@@ -115,7 +137,7 @@ export async function createMaintenanceRequest(prevState: any, formData?: FormDa
 
     revalidatePath('/maintenance');
     revalidatePath('/maintenance/maintenance');
-    return { message: 'Maintenance Request Created Successfully' };
+    return { success: true, message: 'Maintenance Request Created Successfully' };
 }
 
 export async function updateMaintenanceStatus(id: number, status: 'scheduled' | 'completed' | 'cancelled') {

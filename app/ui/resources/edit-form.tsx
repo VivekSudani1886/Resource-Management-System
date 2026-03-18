@@ -3,12 +3,26 @@
 import { updateResource } from '@/app/lib/resource-actions';
 import { Button } from '@/app/ui/button';
 import Link from 'next/link';
-import { useActionState } from 'react';
+import { useActionState, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
+import { useToast } from '@/app/ui/toast';
+import { ChevronDownIcon } from 'lucide-react';
 
 export default function EditResourceForm({ resource, buildings, types }: { resource: any; buildings: any[]; types: any[] }) {
     const updateResourceWithId = updateResource.bind(null, resource.resource_id);
     const initialState = { message: '', success: false, errors: {} };
     const [state, dispatch] = useActionState(updateResourceWithId, initialState);
+    const router = useRouter();
+    const { showToast } = useToast();
+
+    useEffect(() => {
+        if (state?.success) {
+            showToast(state.message || 'Resource updated successfully!', 'success');
+            router.push('/admin/resources');
+        } else if (state?.message && !state?.success) {
+            showToast(state.message, 'error');
+        }
+    }, [state, showToast, router]);
 
     return (
         <form action={dispatch} className="rounded-xl bg-card p-6 shadow-sm border border-border">
@@ -39,7 +53,7 @@ export default function EditResourceForm({ resource, buildings, types }: { resou
                     <select
                         id="resource_type_id"
                         name="resource_type_id"
-                        className="peer block w-full cursor-pointer rounded-lg border border-input bg-background py-3 px-4 text-sm outline-none transition-all focus:border-primary focus:ring-2 focus:ring-primary/20"
+                        className="peer block w-full appearance-none cursor-pointer rounded-lg border border-input bg-background py-3 px-4 text-sm outline-none transition-all focus:border-primary focus:ring-2 focus:ring-primary/20"
                         defaultValue={resource.resource_type_id}
                         required
                     >
@@ -49,6 +63,7 @@ export default function EditResourceForm({ resource, buildings, types }: { resou
                             </option>
                         ))}
                     </select>
+                    <ChevronDownIcon className="pointer-events-none absolute right-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-muted-foreground" />
                 </div>
             </div>
 
@@ -61,7 +76,7 @@ export default function EditResourceForm({ resource, buildings, types }: { resou
                     <select
                         id="building_id"
                         name="building_id"
-                        className="peer block w-full cursor-pointer rounded-lg border border-input bg-background py-3 px-4 text-sm outline-none transition-all focus:border-primary focus:ring-2 focus:ring-primary/20"
+                        className="peer block w-full appearance-none cursor-pointer rounded-lg border border-input bg-background py-3 px-4 text-sm outline-none transition-all focus:border-primary focus:ring-2 focus:ring-primary/20"
                         defaultValue={resource.building_id}
                         required
                     >
@@ -71,6 +86,7 @@ export default function EditResourceForm({ resource, buildings, types }: { resou
                             </option>
                         ))}
                     </select>
+                    <ChevronDownIcon className="pointer-events-none absolute right-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-muted-foreground" />
                 </div>
             </div>
 
@@ -113,13 +129,14 @@ export default function EditResourceForm({ resource, buildings, types }: { resou
                     <select
                         id="is_active"
                         name="is_active"
-                        className="peer block w-full cursor-pointer rounded-lg border border-input bg-background py-3 px-4 text-sm outline-none transition-all focus:border-primary focus:ring-2 focus:ring-primary/20"
+                        className="peer block w-full appearance-none cursor-pointer rounded-lg border border-input bg-background py-3 px-4 text-sm outline-none transition-all focus:border-primary focus:ring-2 focus:ring-primary/20"
                         defaultValue={resource.is_active ? 'active' : 'inactive'}
                         required
                     >
                         <option value="active">Active</option>
                         <option value="inactive">Inactive</option>
                     </select>
+                    <ChevronDownIcon className="pointer-events-none absolute right-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-muted-foreground" />
                 </div>
             </div>
 

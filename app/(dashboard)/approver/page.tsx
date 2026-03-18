@@ -4,6 +4,8 @@ import { Card } from '@/app/ui/card';
 import { CheckCircleIcon, ClockIcon, ClipboardList } from 'lucide-react';
 import { format } from 'date-fns';
 
+import { PageHeader } from '@/app/ui/dashboard/page-header';
+
 export default async function Page() {
     const session = await auth();
     const userEmail = session?.user?.email;
@@ -16,8 +18,10 @@ export default async function Page() {
 
     return (
         <div className="flex flex-col gap-6">
-            <h1 className="text-3xl font-bold tracking-tight text-foreground">Approver Dashboard</h1>
-            <p className="text-muted-foreground">Welcome back, {session?.user?.name || 'Approver'}!</p>
+            <PageHeader
+                title="Approver Dashboard"
+                subtitle={`Welcome back, ${session?.user?.name || 'Approver'}! Managing reservation requests.`}
+            />
 
             {/* Stats Grid */}
             <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">

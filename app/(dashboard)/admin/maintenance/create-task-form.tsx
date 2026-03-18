@@ -3,6 +3,7 @@
 import { createMaintenanceRequest } from '@/app/lib/maintenance-actions';
 import { Button } from '@/app/ui/button';
 import { useActionState } from 'react'; // Updated hook
+import { ChevronDownIcon } from 'lucide-react';
 
 export function CreateTaskForm({ resources }: { resources: any[] }) {
     const initialState: any = { message: '' };
@@ -12,12 +13,15 @@ export function CreateTaskForm({ resources }: { resources: any[] }) {
         <form action={dispatch} className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4 items-end">
             <div className="space-y-2">
                 <label className="text-sm font-medium">Resource</label>
-                <select name="resource_id" className="w-full h-10 rounded-md border border-input bg-background px-3 py-2 text-sm" required>
-                    <option value="">Select Resource</option>
-                    {resources.map(r => (
-                        <option key={r.resource_id} value={r.resource_id}>{r.resource_name}</option>
-                    ))}
-                </select>
+                <div className="relative">
+                    <select name="resource_id" className="w-full appearance-none h-10 rounded-md border border-input bg-background px-3 py-2 text-sm" required>
+                        <option value="">Select Resource</option>
+                        {resources.map(r => (
+                            <option key={r.resource_id} value={r.resource_id}>{r.resource_name}</option>
+                        ))}
+                    </select>
+                    <ChevronDownIcon className="pointer-events-none absolute right-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-muted-foreground" />
+                </div>
             </div>
             <div className="space-y-2">
                 <label className="text-sm font-medium">Type</label>

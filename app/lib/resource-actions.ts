@@ -6,7 +6,7 @@ import { redirect } from 'next/navigation';
 import { z } from 'zod';
 
 const ResourceSchema = z.object({
-    resource_name: z.string().min(1, 'Resource Name is required'),
+    resource_name: z.string().min(1, 'Resource Name is required').transform(s => s.trim()),
     building_id: z.coerce.number().min(1, 'Building is required'),
     resource_type_id: z.coerce.number().min(1, 'Resource Type is required'),
     floor_number: z.coerce.number(),
@@ -15,9 +15,20 @@ const ResourceSchema = z.object({
     is_active: z.string().optional(),
 });
 
+const ResourceTypeSchema = z.object({
+    type_name: z.string().min(1, 'Type Name is required').transform(s => s.trim()),
+});
+
+const BuildingSchema = z.object({
+    building_name: z.string().min(1, 'Building Name is required').transform(s => s.trim()),
+    building_number: z.string().min(1, 'Number/Code is required').transform(s => s.trim()),
+    total_floors: z.coerce.number().min(1, 'Total Floors is required'),
+});
 
 const CreateResource = ResourceSchema;
 const UpdateResource = ResourceSchema.partial();
+const CreateResourceType = ResourceTypeSchema;
+const CreateBuilding = BuildingSchema;
 
 export async function fetchResources(query?: string) {
     try {
@@ -37,7 +48,7 @@ export async function fetchResources(query?: string) {
         return resources;
     } catch (error) {
         console.error('Database Error:', error);
-        throw new Error('Failed to fetch resources.');
+        return [];
     }
 }
 
@@ -49,7 +60,7 @@ export async function fetchBuildings() {
         return buildings;
     } catch (error) {
         console.error('Database Error:', error);
-        throw new Error('Failed to fetch buildings.');
+        return [];
     }
 }
 
@@ -61,7 +72,7 @@ export async function fetchResourceTypes() {
         return types;
     } catch (error) {
         console.error('Database Error:', error);
-        throw new Error('Failed to fetch resource types.');
+        return [];
     }
 }
 
@@ -104,6 +115,21 @@ export async function createResource(prevState: any, formData: FormData) {
     const isActive = is_active === 'active';
 
     try {
+        const existingResources = await prisma.resources.findMany({
+            where: {
+                building_id: building_id,
+            },
+        });
+
+        const existingResource = existingResources.find(r => r.resource_name.toLowerCase() === resource_name.toLowerCase());
+
+        if (existingResource) {
+            return {
+                success: false,
+                message: 'Resource name already exists in this building.',
+            };
+        }
+
         await prisma.resources.create({
             data: {
                 resource_name,
@@ -115,8 +141,14 @@ export async function createResource(prevState: any, formData: FormData) {
                 is_active: isActive,
             },
         });
-    } catch (error) {
+    } catch (error: any) {
         console.error(error);
+        if (error.code === 'P2002') {
+            return {
+                success: false,
+                message: 'Resource name already exists in this building.',
+            };
+        }
         return {
             success: false,
             message: 'Database Error: Failed to Create Resource.',
@@ -124,7 +156,7 @@ export async function createResource(prevState: any, formData: FormData) {
     }
 
     revalidatePath('/admin/resources');
-    redirect('/admin/resources');
+    return { success: true, message: 'Resource added successfully!' };
 }
 
 export async function updateResource(id: number, prevState: any, formData: FormData) {
@@ -150,6 +182,23 @@ export async function updateResource(id: number, prevState: any, formData: FormD
     const isActive = is_active === 'on' || is_active === 'true' || is_active === 'active'; // Handle checkbox variations
 
     try {
+        const existingResources = await prisma.resources.findMany({
+            where: {
+                building_id: building_id,
+                resource_id: {
+                    not: id,
+                },
+            },
+        });
+        const existingResource = existingResources.find(r => resource_name && r.resource_name.toLowerCase() === resource_name.toLowerCase());
+
+        if (existingResource) {
+            return {
+                success: false,
+                message: 'Resource name already exists in this building.',
+            };
+        }
+
         await prisma.resources.update({
             where: { resource_id: id },
             data: {
@@ -162,12 +211,15 @@ export async function updateResource(id: number, prevState: any, formData: FormD
                 is_active: isActive,
             },
         });
-    } catch (error) {
+    } catch (error: any) {
+        if (error.code === 'P2002') {
+            return { success: false, message: 'Resource name already exists in this building.' };
+        }
         return { success: false, message: 'Database Error: Failed to Update Resource.' };
     }
 
     revalidatePath('/admin/resources');
-    redirect('/admin/resources');
+    return { success: true, message: 'Resource updated successfully!' };
 }
 
 export async function deleteResource(id: number) {
@@ -182,3 +234,108 @@ export async function deleteResource(id: number) {
     revalidatePath('/admin/resources');
     return { success: true, message: 'Resource deleted successfully!' };
 }
+
+export async function createResourceType(prevState: any, formData: FormData) {
+    const validatedFields = CreateResourceType.safeParse({
+        type_name: formData.get('type_name'),
+    });
+
+    if (!validatedFields.success) {
+        return {
+            success: false,
+            errors: validatedFields.error.flatten().fieldErrors,
+            message: 'Missing Fields. Failed to Create Resource Type.',
+        };
+    }
+
+    const { type_name } = validatedFields.data;
+
+    try {
+        const existingTypes = await prisma.resource_types.findMany();
+        const existingType = existingTypes.find(t => t.type_name.toLowerCase() === type_name.toLowerCase());
+
+        if (existingType) {
+            return {
+                success: false,
+                message: 'Resource type already exists.',
+            };
+        }
+
+        await prisma.resource_types.create({
+            data: {
+                type_name,
+            },
+        });
+    } catch (error: any) {
+        console.error(error);
+        if (error.code === 'P2002') {
+            return {
+                success: false,
+                message: 'Resource type already exists.',
+            };
+        }
+        return {
+            success: false,
+            message: 'Database Error: Failed to Create Resource Type.',
+        };
+    }
+
+    revalidatePath('/admin/resources');
+    revalidatePath('/admin/resources/create');
+    return { success: true, message: 'Resource Type created successfully!' };
+}
+
+export async function createBuilding(prevState: any, formData: FormData) {
+    const validatedFields = CreateBuilding.safeParse({
+        building_name: formData.get('building_name'),
+        building_number: formData.get('building_number'),
+        total_floors: formData.get('total_floors'),
+    });
+
+    if (!validatedFields.success) {
+        return {
+            success: false,
+            errors: validatedFields.error.flatten().fieldErrors,
+            message: 'Missing Fields. Failed to Create Building.',
+        };
+    }
+
+    const { building_name, building_number, total_floors } = validatedFields.data;
+
+    try {
+        const existingBuildings = await prisma.buildings.findMany();
+        const existingBuilding = existingBuildings.find(b => b.building_number.toLowerCase() === building_number.toLowerCase());
+
+        if (existingBuilding) {
+            return {
+                success: false,
+                message: 'Building code already exists.',
+            };
+        }
+
+        await prisma.buildings.create({
+            data: {
+                building_name,
+                building_number,
+                total_floors,
+            },
+        });
+    } catch (error: any) {
+        console.error(error);
+        if (error.code === 'P2002') {
+            return {
+                success: false,
+                message: 'Building code already exists.',
+            };
+        }
+        return {
+            success: false,
+            message: 'Database Error: Failed to Create Building.',
+        };
+    }
+
+    revalidatePath('/admin/resources');
+    revalidatePath('/admin/resources/create');
+    return { success: true, message: 'Building created successfully!' };
+}
+

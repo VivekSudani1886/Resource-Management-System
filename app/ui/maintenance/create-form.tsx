@@ -3,12 +3,27 @@
 import { createMaintenanceRequest } from '@/app/lib/maintenance-actions';
 import { Button } from '@/app/ui/button';
 import Link from 'next/link';
-import { useActionState } from 'react';
+import { useActionState, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
+import { useToast } from '@/app/ui/toast';
 import { Card, CardContent, CardHeader, CardTitle } from '@/app/ui/card';
+import { ChevronDownIcon } from 'lucide-react';
 
 export default function CreateMaintenanceForm({ resources }: { resources: any[] }) {
-    const initialState = { message: '', errors: {} };
+    const initialState = { message: '', errors: {}, success: false };
+    // @ts-ignore
     const [state, dispatch] = useActionState(createMaintenanceRequest, initialState);
+    const router = useRouter();
+    const { showToast } = useToast();
+
+    useEffect(() => {
+        if (state?.success) {
+            showToast(state.message || 'Maintenance request created successfully!', 'success');
+            router.push('/maintenance/maintenance');
+        } else if (state?.message && !state?.success) {
+            showToast(state.message, 'error');
+        }
+    }, [state, showToast, router]);
 
     return (
         <Card>
@@ -21,19 +36,22 @@ export default function CreateMaintenanceForm({ resources }: { resources: any[] 
                         <label htmlFor="resource_id" className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
                             Resource
                         </label>
-                        <select
-                            name="resource_id"
-                            id="resource_id"
-                            className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
-                            required
-                        >
-                            <option value="">Select a resource...</option>
-                            {resources.map((resource) => (
-                                <option key={resource.resource_id} value={resource.resource_id}>
-                                    {resource.resource_name} ({resource.buildings.building_name})
-                                </option>
-                            ))}
-                        </select>
+                        <div className="relative">
+                            <select
+                                name="resource_id"
+                                id="resource_id"
+                                className="flex appearance-none h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+                                required
+                            >
+                                <option value="">Select a resource...</option>
+                                {resources.map((resource) => (
+                                    <option key={resource.resource_id} value={resource.resource_id}>
+                                        {resource.resource_name} ({resource.buildings.building_name})
+                                    </option>
+                                ))}
+                            </select>
+                            <ChevronDownIcon className="pointer-events-none absolute right-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-muted-foreground" />
+                        </div>
                         {state.errors?.resource_id && (
                             <p className="text-sm text-red-500">{state.errors.resource_id[0]}</p>
                         )}
@@ -43,19 +61,22 @@ export default function CreateMaintenanceForm({ resources }: { resources: any[] 
                         <label htmlFor="maintenance_type" className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
                             Maintenance Type
                         </label>
-                        <select
-                            name="maintenance_type"
-                            id="maintenance_type"
-                            className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
-                            required
-                        >
-                            <option value="">Select type...</option>
-                            <option value="Repair">Repair</option>
-                            <option value="Inspection">Inspection</option>
-                            <option value="Cleaning">Cleaning</option>
-                            <option value="Replacement">Replacement</option>
-                            <option value="Other">Other</option>
-                        </select>
+                        <div className="relative">
+                            <select
+                                name="maintenance_type"
+                                id="maintenance_type"
+                                className="flex appearance-none h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+                                required
+                            >
+                                <option value="">Select type...</option>
+                                <option value="Repair">Repair</option>
+                                <option value="Inspection">Inspection</option>
+                                <option value="Cleaning">Cleaning</option>
+                                <option value="Replacement">Replacement</option>
+                                <option value="Other">Other</option>
+                            </select>
+                            <ChevronDownIcon className="pointer-events-none absolute right-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-muted-foreground" />
+                        </div>
                         {state.errors?.maintenance_type && (
                             <p className="text-sm text-red-500">{state.errors.maintenance_type[0]}</p>
                         )}

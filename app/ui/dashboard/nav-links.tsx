@@ -8,7 +8,7 @@ import {
     Wrench,
     BarChart3,
     Users,
-    History,
+    History
 } from 'lucide-react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
