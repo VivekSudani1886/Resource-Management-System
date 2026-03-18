@@ -12,10 +12,8 @@ export const metadata: Metadata = {
 
 export default function RootLayout({
   children,
-  auth,
 }: Readonly<{
   children: React.ReactNode;
-  auth: React.ReactNode;
 }>) {
   return (
     <html lang="en" suppressHydrationWarning>
@@ -23,7 +21,6 @@ export default function RootLayout({
         className={`${inter.className} antialiased`}
       >
         <Providers>
-          {auth}
           {children}
         </Providers>
       </body>
