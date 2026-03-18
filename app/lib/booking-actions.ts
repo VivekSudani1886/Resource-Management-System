@@ -1,6 +1,6 @@
 'use server';
 
-import { Prisma as prisma } from './prisma';
+import { prisma } from './prisma';
 import { revalidatePath } from 'next/cache';
 import { redirect } from 'next/navigation';
 import { z } from 'zod';

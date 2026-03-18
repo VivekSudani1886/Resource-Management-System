@@ -1,5 +1,5 @@
 import { auth } from '@/auth';
-import { Prisma as prisma } from '@/app/lib/prisma';
+import { prisma } from '@/app/lib/prisma';
 import bcrypt from 'bcryptjs';
 import { NextResponse } from 'next/server';
 
