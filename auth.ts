@@ -5,7 +5,7 @@ import { z } from 'zod';
 import bcrypt from 'bcryptjs';
 import type { User } from 'next-auth';
 
-import { Prisma as prisma } from '@/app/lib/prisma';
+import { prisma } from '@/app/lib/prisma';
 
 // Mock User removed
 

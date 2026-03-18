@@ -1,5 +1,5 @@
 import { fetchUserDashboardData } from '@/app/lib/dashboard-actions';
-import { Prisma as prisma } from '@/app/lib/prisma';
+import { prisma } from '@/app/lib/prisma';
 import { auth } from '@/auth';
 import ProfileView from '@/app/ui/profile-view';
 

@@ -1,6 +1,6 @@
 'use server';
 
-import { Prisma as prisma } from './prisma';
+import { prisma } from './prisma';
 
 export async function fetchReportStats() {
     try {

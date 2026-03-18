@@ -1,6 +1,6 @@
 import { fetchUserBookings } from '@/app/lib/booking-actions';
 import { auth } from '@/auth';
-import { Prisma as prisma } from '@/app/lib/prisma';
+import { prisma } from '@/app/lib/prisma';
 import Link from 'next/link';
 import { Button } from '@/app/ui/button';
 import { PlusIcon, CalendarIcon, ClockIcon } from 'lucide-react';
