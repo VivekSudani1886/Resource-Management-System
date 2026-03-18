@@ -4,7 +4,7 @@ import { PlusIcon } from 'lucide-react';
 import Link from 'next/link';
 import ResourceGrid from '@/app/ui/resources/resource-grid';
 import { Suspense } from 'react';
-import { auth } from '@/auth';
+import { PageHeader } from '@/app/ui/dashboard/page-header';
 
 export default async function Page({
     searchParams,
@@ -14,28 +14,27 @@ export default async function Page({
         page?: string;
     }>;
 }) {
-    // const session = await auth();
-    // const isAdmin = session?.user?.role === 'admin';
     const isAdmin = true; // Temporary for frontend demo
 
     const params = await searchParams;
     const query = params?.query || '';
     const currentPage = Number(params?.page) || 1;
 
-
     return (
         <div className="w-full">
-            <div className="flex w-full items-center justify-between">
-                <h1 className="text-2xl font-bold text-foreground">Resources</h1>
+            <PageHeader
+                title="Resources"
+                subtitle="View and manage all available rooms, labs, and equipment."
+            >
                 {isAdmin && (
                     <Link href="/admin/resources/create">
-                        <Button className="flex items-center gap-2 bg-primary text-primary-foreground hover:bg-primary/90">
+                        <Button className="flex items-center gap-2 shadow-lg shadow-primary/20">
                             <PlusIcon className="h-5 w-5" />
-                            <span className="hidden md:block">Add Resource</span>
+                            <span>Add Resource</span>
                         </Button>
                     </Link>
                 )}
-            </div>
+            </PageHeader>
             <div className="mt-4 flex items-center justify-between gap-2 md:mt-8">
                 <Search placeholder="Search resources..." />
             </div>

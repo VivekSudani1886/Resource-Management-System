@@ -55,22 +55,22 @@ export function NotificationsDropdown() {
         <div className="relative" ref={dropdownRef}>
             <button
                 onClick={() => setIsOpen(!isOpen)}
-                className="relative rounded-full p-2 text-muted-foreground hover:bg-accent hover:text-foreground transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-primary/20"
+                className={`relative rounded-full p-2.5 transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-primary/20 ${isOpen ? "bg-primary/10 text-primary" : "text-muted-foreground hover:bg-accent hover:text-foreground"}`}
             >
                 <Bell className="h-5 w-5" />
                 {unreadCount > 0 && (
-                    <span className="absolute right-1.5 top-1.5 flex h-4 w-4 items-center justify-center rounded-full bg-red-500 text-[10px] font-bold text-white ring-2 ring-background animate-pulse">
+                    <span className="absolute right-1 top-1 flex h-4 w-4 items-center justify-center rounded-full bg-destructive text-[10px] font-bold text-destructive-foreground ring-2 ring-background animate-pulse shadow-sm shadow-destructive/50">
                         {unreadCount > 9 ? '9+' : unreadCount}
                     </span>
                 )}
             </button>
 
             {isOpen && (
-                <div className="absolute right-0 mt-3 w-80 origin-top-right rounded-2xl border border-border bg-card p-2 shadow-2xl ring-1 ring-black/5 animate-in fade-in zoom-in-95 duration-200 z-50">
-                    <div className="flex items-center justify-between px-3 py-2 border-b border-border/50">
+                <div className="absolute right-0 mt-3 w-[22rem] origin-top-right rounded-2xl border border-border/50 bg-background/80 p-2 shadow-2xl backdrop-blur-2xl ring-1 ring-black/5 animate-in fade-in zoom-in-95 duration-200 z-50">
+                    <div className="flex items-center justify-between px-3 py-3 border-b border-border/30">
                         <h3 className="text-sm font-bold text-foreground">Notifications</h3>
                         {unreadCount > 0 && (
-                            <span className="text-[10px] font-semibold text-primary uppercase tracking-wider">
+                            <span className="rounded-full bg-primary/10 px-2.5 py-0.5 text-[10px] font-semibold text-primary uppercase tracking-wider backdrop-blur-sm">
                                 {unreadCount} New
                             </span>
                         )}
@@ -94,11 +94,11 @@ export function NotificationsDropdown() {
                                         <div
                                             key={notification.notification_id}
                                             onClick={() => !notification.is_read && handleMarkAsRead(notification.notification_id)}
-                                            className={`group relative flex gap-3 rounded-xl p-3 transition-all duration-200 cursor-pointer ${notification.is_read ? 'hover:bg-accent/50' : 'bg-primary/[0.03] hover:bg-primary/[0.05]'
+                                            className={`group relative flex gap-3.5 rounded-xl p-3 transition-all duration-300 cursor-pointer ${notification.is_read ? 'hover:bg-accent/40 opacity-75 hover:opacity-100' : 'bg-primary/5 hover:bg-primary/10 shadow-sm shadow-primary/5 border border-primary/10'
                                                 }`}
                                         >
-                                            <div className={`mt-0.5 flex h-8 w-8 shrink-0 items-center justify-center rounded-lg ${styles.bg}`}>
-                                                <Icon className={`h-4 w-4 ${styles.color}`} />
+                                            <div className={`mt-0.5 flex h-9 w-9 shrink-0 items-center justify-center rounded-xl backdrop-blur-sm ${styles.bg}`}>
+                                                <Icon className={`h-[18px] w-[18px] ${styles.color}`} />
                                             </div>
                                             <div className="flex-1 space-y-1">
                                                 <div className="flex items-start justify-between gap-2">
@@ -126,8 +126,8 @@ export function NotificationsDropdown() {
                         )}
                     </div>
 
-                    <div className="mt-2 border-t border-border/50 pt-2 px-1">
-                        <button className="w-full rounded-lg py-2 text-center text-xs font-semibold text-muted-foreground hover:bg-accent hover:text-foreground transition-all">
+                    <div className="mt-2 border-t border-border/30 pt-2 px-1">
+                        <button className="w-full rounded-lg py-2.5 text-center text-xs font-semibold text-muted-foreground hover:bg-accent hover:text-foreground transition-all duration-300">
                             View All Notifications
                         </button>
                     </div>

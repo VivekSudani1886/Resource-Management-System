@@ -6,6 +6,7 @@ import Link from 'next/link';
 import { useActionState, useEffect } from 'react';
 import { useToast } from '@/app/ui/toast';
 import { useRouter } from 'next/navigation';
+import { ChevronDownIcon } from 'lucide-react';
 
 export default function Form({ buildings, types }: { buildings: any[], types: any[] }) {
     // @ts-ignore
@@ -60,7 +61,7 @@ export default function Form({ buildings, types }: { buildings: any[], types: an
                     <select
                         id="resource_type_id"
                         name="resource_type_id"
-                        className="peer block w-full cursor-pointer rounded-lg border border-input bg-background py-3 px-4 text-sm outline-none transition-all focus:border-primary focus:ring-2 focus:ring-primary/20"
+                        className="peer block w-full appearance-none cursor-pointer rounded-lg border border-input bg-background py-3 px-4 text-sm outline-none transition-all focus:border-primary focus:ring-2 focus:ring-primary/20"
                         defaultValue=""
                         aria-describedby="type-error"
                     >
@@ -73,6 +74,7 @@ export default function Form({ buildings, types }: { buildings: any[], types: an
                             </option>
                         ))}
                     </select>
+                    <ChevronDownIcon className="pointer-events-none absolute right-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-muted-foreground" />
                 </div>
                 {state.errors?.resource_type_id && (
                     <div id="type-error" aria-live="polite" className="mt-2 text-sm text-red-500">
@@ -92,7 +94,7 @@ export default function Form({ buildings, types }: { buildings: any[], types: an
                     <select
                         id="building_id"
                         name="building_id"
-                        className="peer block w-full cursor-pointer rounded-lg border border-input bg-background py-3 px-4 text-sm outline-none transition-all focus:border-primary focus:ring-2 focus:ring-primary/20"
+                        className="peer block w-full appearance-none cursor-pointer rounded-lg border border-input bg-background py-3 px-4 text-sm outline-none transition-all focus:border-primary focus:ring-2 focus:ring-primary/20"
                         defaultValue=""
                         aria-describedby="building-error"
                     >
@@ -105,6 +107,7 @@ export default function Form({ buildings, types }: { buildings: any[], types: an
                             </option>
                         ))}
                     </select>
+                    <ChevronDownIcon className="pointer-events-none absolute right-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-muted-foreground" />
                 </div>
                 {state.errors?.building_id && (
                     <div id="building-error" aria-live="polite" className="mt-2 text-sm text-red-500">

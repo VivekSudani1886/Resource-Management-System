@@ -32,7 +32,13 @@ export async function fetchAdminDashboardData() {
         };
     } catch (error) {
         console.error('Database Error:', error);
-        throw new Error('Failed to fetch admin dashboard data.');
+        return {
+            totalUsers: 0,
+            totalResources: 0,
+            pendingBookings: 0,
+            totalBookings: 0,
+            recentBookings: [],
+        };
     }
 }
 
@@ -75,7 +81,12 @@ export async function fetchUserDashboardData(email: string) {
 
     } catch (error) {
         console.error('Database Error:', error);
-        throw new Error('Failed to fetch user dashboard data.');
+        return {
+            myBookingsCount: 0,
+            myPendingcount: 0,
+            approvedBookings: 0,
+            recentBookings: []
+        };
     }
 }
 
@@ -113,6 +124,10 @@ export async function fetchApproverDashboardData(email: string) {
         };
     } catch (error) {
         console.error('Database Error:', error);
-        throw new Error('Failed to fetch approver dashboard data.');
+        return {
+            pendingApprovals: 0,
+            approvedByMe: 0,
+            recentPendingBookings: []
+        };
     }
 }

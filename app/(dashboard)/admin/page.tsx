@@ -2,6 +2,7 @@ import { fetchAdminDashboardData } from '@/app/lib/dashboard-actions';
 import { UsersIcon, BuildingOfficeIcon, ClockIcon, CalendarIcon, ArrowTrendingUpIcon } from '@heroicons/react/24/outline';
 import Link from 'next/link';
 import { Suspense } from 'react';
+import { PageHeader } from '@/app/ui/dashboard/page-header';
 
 async function DashboardContent() {
     const { totalUsers, totalResources, pendingBookings, totalBookings, recentBookings } = await fetchAdminDashboardData();
@@ -163,10 +164,10 @@ async function DashboardContent() {
 export default function Page() {
     return (
         <div className="flex flex-col gap-8">
-            <div>
-                <h1 className="text-3xl font-extrabold tracking-tight text-foreground">Admin Overview</h1>
-                <p className="text-muted-foreground mt-2">Manage your organization's resources and users from one central hub.</p>
-            </div>
+            <PageHeader
+                title="Admin Overview"
+                subtitle="Manage your organization's resources and users from one central hub."
+            />
 
             <Suspense fallback={
                 <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">

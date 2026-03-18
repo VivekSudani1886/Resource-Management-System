@@ -35,7 +35,7 @@ export async function fetchUsers(query?: string) {
         return users;
     } catch (error) {
         console.error('Database Error:', error);
-        throw new Error('Failed to fetch users.');
+        return [];
     }
 }
 
@@ -47,7 +47,7 @@ export async function fetchUserById(id: number) {
         return user;
     } catch (error) {
         console.error('Database Error:', error);
-        throw new Error('Failed to fetch user.');
+        return null;
     }
 }
 
@@ -88,7 +88,7 @@ export async function createUser(prevState: any, formData: FormData) {
     }
 
     revalidatePath('/admin/users');
-    return { success: true, message: 'User created successfully!' };
+    return { success: true, message: 'User added successfully!' };
 }
 
 export async function updateUser(id: number, prevState: any, formData: FormData) {

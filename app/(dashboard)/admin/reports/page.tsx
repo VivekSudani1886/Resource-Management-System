@@ -1,6 +1,7 @@
 import { Suspense } from 'react';
 import { fetchDetailedReportStats, fetchResourceUtilization } from '@/app/lib/report-actions';
-import { ChartBarIcon, StarIcon, CheckBadgeIcon, WrenchScrewdriverIcon } from '@heroicons/react/24/outline'; // Adjust for your icon set
+import { ChartBarIcon, StarIcon, CheckBadgeIcon, WrenchScrewdriverIcon } from '@heroicons/react/24/outline';
+import { PageHeader } from '@/app/ui/dashboard/page-header';
 
 async function ReportStats() {
     const { popularTypeName, topUser, approvalRate, healthScore } = await fetchDetailedReportStats();
@@ -103,7 +104,10 @@ async function UtilizationTable() {
 export default function Page() {
     return (
         <div className="w-full">
-            <h1 className="text-2xl font-bold text-foreground mb-6">Reports</h1>
+            <PageHeader
+                title="System Reports"
+                subtitle="Analyze resource utilization, user activity, and system health."
+            />
             <Suspense fallback={<div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
                 {[...Array(4)].map((_, i) => (
                     <div key={i} className="h-[120px] rounded-xl bg-muted/50 animate-pulse" />

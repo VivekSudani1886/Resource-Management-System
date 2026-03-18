@@ -63,34 +63,40 @@ function ToastItem({ toast, onRemove }: { toast: Toast; onRemove: (id: string) =
     }, []);
 
     const icons = {
-        success: <CheckCircle2 className="h-5 w-5 text-emerald-100" />,
-        error: <AlertCircle className="h-5 w-5 text-red-100" />,
-        warning: <AlertTriangle className="h-5 w-5 text-amber-100" />,
-        info: <Info className="h-5 w-5 text-blue-100" />,
+        success: <CheckCircle2 className="h-5 w-5 text-emerald-500 dark:text-emerald-400" />,
+        error: <AlertCircle className="h-5 w-5 text-rose-500 dark:text-rose-400" />,
+        warning: <AlertTriangle className="h-5 w-5 text-amber-500 dark:text-amber-400" />,
+        info: <Info className="h-5 w-5 text-blue-500 dark:text-blue-400" />,
     };
 
     const styles = {
-        success: 'bg-emerald-600 border-emerald-500/50 shadow-emerald-500/20',
-        error: 'bg-rose-600 border-rose-500/50 shadow-rose-500/20',
-        warning: 'bg-amber-600 border-amber-500/50 shadow-amber-500/20',
-        info: 'bg-blue-600 border-blue-500/50 shadow-blue-500/20',
+        success: 'bg-background/80 border-emerald-500/30 shadow-[0_4px_24px_rgba(16,185,129,0.2)]',
+        error: 'bg-background/80 border-rose-500/30 shadow-[0_4px_24px_rgba(244,63,94,0.2)]',
+        warning: 'bg-background/80 border-amber-500/30 shadow-[0_4px_24px_rgba(245,158,11,0.2)]',
+        info: 'bg-background/80 border-blue-500/30 shadow-[0_4px_24px_rgba(59,130,246,0.2)]',
+    };
+
+    const iconBgStyles = {
+        success: 'bg-emerald-500/10',
+        error: 'bg-rose-500/10',
+        warning: 'bg-amber-500/10',
+        info: 'bg-blue-500/10',
     };
 
     return (
         <div
             className={cn(
-                "flex items-center gap-4 px-4 py-4 rounded-xl border shadow-2xl pointer-events-auto transition-all duration-500 transform",
-                isVisible ? "translate-x-0 opacity-100" : "translate-x-full opacity-0",
-                styles[toast.type],
-                "text-white backdrop-blur-md"
+                "flex items-center gap-4 px-4 py-4 rounded-xl border pointer-events-auto transition-all duration-500 transform backdrop-blur-xl",
+                isVisible ? "translate-x-0 opacity-100 scale-100" : "translate-x-full opacity-0 scale-95",
+                styles[toast.type]
             )}
             style={{ minWidth: '320px', maxWidth: '450px' }}
         >
-            <div className="flex-shrink-0 bg-white/20 p-2 rounded-lg backdrop-blur-sm">
+            <div className={cn("flex-shrink-0 p-2 rounded-xl backdrop-blur-sm transition-colors", iconBgStyles[toast.type])}>
                 {icons[toast.type]}
             </div>
             <div className="flex-1">
-                <p className="text-sm font-semibold tracking-tight leading-snug">
+                <p className="text-sm font-semibold tracking-tight text-foreground leading-snug">
                     {toast.message}
                 </p>
             </div>
@@ -99,10 +105,10 @@ function ToastItem({ toast, onRemove }: { toast: Toast; onRemove: (id: string) =
                     setIsVisible(false);
                     setTimeout(() => onRemove(toast.id), 500);
                 }}
-                className="flex-shrink-0 p-1.5 rounded-lg hover:bg-white/20 transition-all active:scale-95 group"
+                className="flex-shrink-0 p-1.5 rounded-lg hover:bg-muted transition-colors active:scale-95 group"
                 aria-label="Close notification"
             >
-                <X className="h-4 w-4 text-white/70 group-hover:text-white transition-colors" />
+                <X className="h-4 w-4 text-muted-foreground group-hover:text-foreground transition-colors" />
             </button>
         </div>
     );

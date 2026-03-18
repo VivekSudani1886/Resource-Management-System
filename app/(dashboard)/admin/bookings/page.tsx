@@ -1,25 +1,25 @@
 import { fetchAllBookings } from '@/app/lib/booking-actions';
 import { CalendarIcon, UserIcon, MapPinIcon } from 'lucide-react';
 import BookingDetailsModal from '@/app/ui/bookings/booking-details-modal';
-
-const statusColors = {
-    pending: 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-400',
-    approved: 'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400',
-    rejected: 'bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-400',
-} as const;
+import { PageHeader } from '@/app/ui/dashboard/page-header';
+import { Card } from '@/app/ui/card';
 
 export default async function Page() {
     const bookings = await fetchAllBookings();
 
     return (
         <div className="w-full">
-            <h1 className="text-2xl font-bold text-foreground mb-6">All Bookings</h1>
+            <PageHeader
+                title="All Bookings"
+                subtitle="Manage and monitor all resource bookings across the organization."
+            />
 
-            <div className="rounded-xl border bg-card shadow-sm overflow-hidden">
+            <Card className="overflow-hidden border-border/50 shadow-sm">
                 <div className="overflow-x-auto">
                     <table className="w-full text-sm text-left">
                         <thead className="bg-muted/50 text-xs uppercase text-muted-foreground">
                             <tr>
+                                <th className="px-6 py-4">Event</th>
                                 <th className="px-6 py-4">Status</th>
                                 <th className="px-6 py-4">Resource</th>
                                 <th className="px-6 py-4">User</th>
@@ -31,6 +31,9 @@ export default async function Page() {
                         <tbody className="divide-y divide-border/50">
                             {bookings.map((booking) => (
                                 <tr key={booking.booking_id} className="hover:bg-muted/10 transition-colors">
+                                    <td className="px-6 py-4 font-medium">
+                                        {booking.event_name || <span className="text-muted-foreground italic text-xs">No event</span>}
+                                    </td>
                                     <td className="px-6 py-4">
                                         <span className={`inline-flex items-center rounded-md px-2.5 py-0.5 text-xs font-medium border border-transparent shadow-sm ${booking.status === 'approved' ? 'bg-green-600 text-white dark:bg-green-900 dark:text-green-100' :
                                             booking.status === 'rejected' ? 'bg-red-600 text-white dark:bg-red-900 dark:text-red-100' :
@@ -73,7 +76,7 @@ export default async function Page() {
                             ))}
                             {bookings.length === 0 && (
                                 <tr>
-                                    <td colSpan={5} className="px-6 py-8 text-center text-muted-foreground">
+                                    <td colSpan={7} className="px-6 py-8 text-center text-muted-foreground">
                                         No bookings found in the system.
                                     </td>
                                 </tr>
@@ -81,7 +84,7 @@ export default async function Page() {
                         </tbody>
                     </table>
                 </div>
-            </div>
+            </Card>
         </div>
     );
 }

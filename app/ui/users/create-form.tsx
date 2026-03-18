@@ -3,11 +3,26 @@
 import { createUser } from '@/app/lib/user-actions';
 import { Button } from '@/app/ui/button';
 import Link from 'next/link';
-import { useActionState } from 'react';
+import { useActionState, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
+import { useToast } from '@/app/ui/toast';
+import { ChevronDownIcon } from 'lucide-react';
 
 export default function UserForm() {
-    const initialState = { message: '', errors: {} };
+    const initialState = { message: '', errors: {}, success: false };
+    // @ts-ignore
     const [state, dispatch] = useActionState(createUser, initialState);
+    const router = useRouter();
+    const { showToast } = useToast();
+
+    useEffect(() => {
+        if (state?.success) {
+            showToast(state.message || 'User added successfully!', 'success');
+            router.push('/admin/users');
+        } else if (state?.message && !state?.success) {
+            showToast(state.message, 'error');
+        }
+    }, [state, showToast, router]);
 
     return (
         <form action={dispatch} className="rounded-xl bg-card p-6 shadow-sm border border-border">
@@ -68,7 +83,7 @@ export default function UserForm() {
                     <select
                         id="role"
                         name="role"
-                        className="peer block w-full cursor-pointer rounded-lg border border-input bg-background py-3 px-4 text-sm outline-none transition-all focus:border-primary focus:ring-2 focus:ring-primary/20"
+                        className="peer block w-full appearance-none cursor-pointer rounded-lg border border-input bg-background py-3 px-4 text-sm outline-none transition-all focus:border-primary focus:ring-2 focus:ring-primary/20"
                         defaultValue=""
                         aria-describedby="role-error"
                     >
@@ -78,6 +93,7 @@ export default function UserForm() {
                         <option value="approver">Approver</option>
                         <option value="maintenance">Maintenance</option>
                     </select>
+                    <ChevronDownIcon className="pointer-events-none absolute right-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-muted-foreground" />
                 </div>
                 {state.errors?.role && (
                     <div id="role-error" aria-live="polite" className="mt-2 text-sm text-red-500">

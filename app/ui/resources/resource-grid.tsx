@@ -7,8 +7,9 @@ export default async function ResourceGrid({ query }: { query: string }) {
 
     if (!resources || resources.length === 0) {
         return (
-            <div className="mt-6 p-12 text-center rounded-lg border-2 border-dashed border-zinc-200 dark:border-zinc-800 text-muted-foreground">
-                <p>No resources found matching "{query}".</p>
+            <div className="mt-6 p-12 text-center rounded-lg border-2 border-dashed border-zinc-200 dark:border-zinc-800 text-muted-foreground flex flex-col items-center gap-2">
+                <Box className="h-10 w-10 text-muted-foreground/30" />
+                <p>No resources found matching "{query}". Or, the database is currently unreachable.</p>
                 <Link href="/admin/resources/create" className="text-primary hover:underline mt-2 inline-block">
                     Create a new resource
                 </Link>

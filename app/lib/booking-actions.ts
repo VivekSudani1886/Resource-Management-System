@@ -11,6 +11,7 @@ const BookingSchema = z.object({
     resource_id: z.coerce.number().min(1, 'Resource is required'),
     start_datetime: z.string().min(1, 'Start Time is required'),
     end_datetime: z.string().min(1, 'End Time is required'),
+    event_name: z.string().optional(),
 });
 
 const CreateBooking = BookingSchema;
@@ -31,7 +32,7 @@ export async function fetchUserBookings(userId: number) {
         return bookings;
     } catch (error) {
         console.error('Database Error:', error);
-        throw new Error('Failed to fetch user bookings.');
+        return [];
     }
 }
 
@@ -50,7 +51,7 @@ export async function fetchPendingApprovals() {
         return bookings;
     } catch (error) {
         console.error('Database Error:', error);
-        throw new Error('Failed to fetch pending approvals.');
+        return [];
     }
 }
 
@@ -64,20 +65,33 @@ export async function createBooking(prevState: any, formData: FormData) {
     const user = await prisma.users.findUnique({ where: { email: session.user.email } });
     if (!user) return { message: 'User not found' };
 
+    // Check for maintenance BEFORE field validation so the user gets a specific message
+    const rawResourceId = Number(formData.get('resource_id'));
+    if (rawResourceId && rawResourceId > 0) {
+        const resourceCheck = await prisma.resources.findUnique({
+            where: { resource_id: rawResourceId }
+        });
+
+        if (resourceCheck && resourceCheck.is_active === false) {
+            return { message: 'This resource is currently under maintenance and cannot be booked. Please select a different resource.' };
+        }
+    }
+
     const validatedFields = CreateBooking.safeParse({
         resource_id: formData.get('resource_id'),
         start_datetime: formData.get('start_datetime'),
         end_datetime: formData.get('end_datetime'),
+        event_name: formData.get('event_name'),
     });
 
     if (!validatedFields.success) {
         return {
             errors: validatedFields.error.flatten().fieldErrors,
-            message: 'Missing Fields. Failed to Create Booking.',
+            message: 'Please ensure all required fields are correctly filled.',
         };
     }
 
-    const { resource_id, start_datetime, end_datetime } = validatedFields.data;
+    const { resource_id, start_datetime, end_datetime, event_name } = validatedFields.data;
 
     // Basic validation: End > Start
     if (new Date(end_datetime) <= new Date(start_datetime)) {
@@ -85,6 +99,18 @@ export async function createBooking(prevState: any, formData: FormData) {
     }
 
     try {
+        const resourceCheck = await prisma.resources.findUnique({
+            where: { resource_id: resource_id }
+        });
+
+        if (!resourceCheck) {
+            return { message: 'Selected resource could not be found.' };
+        }
+
+        if (resourceCheck.is_active === false) {
+            return { message: 'This resource is currently under maintenance and cannot be booked. Please select a different resource.' };
+        }
+
         // Check for conflicts
         const conflicts = await prisma.bookings.findMany({
             where: {
@@ -115,6 +141,7 @@ export async function createBooking(prevState: any, formData: FormData) {
                 resource_id: resource_id,
                 start_datetime: new Date(start_datetime),
                 end_datetime: new Date(end_datetime),
+                event_name: event_name,
                 status: 'pending', // Default to pending
                 created_at: new Date(),
             },
@@ -250,7 +277,7 @@ export async function fetchAllBookings(query?: string) {
         return bookings;
     } catch (error) {
         console.error('Database Error:', error);
-        throw new Error('Failed to fetch all bookings.');
+        return [];
     }
 }
 
@@ -280,6 +307,6 @@ export async function fetchApproverHistory() {
         return bookings;
     } catch (error) {
         console.error('Database Error:', error);
-        throw new Error('Failed to fetch approver history.');
+        return [];
     }
 }

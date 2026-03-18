@@ -7,6 +7,8 @@ import { PlusIcon, CalendarIcon, ClockIcon } from 'lucide-react';
 import { format } from 'date-fns';
 import BookingDetailsModal from '@/app/ui/bookings/booking-details-modal';
 
+import { PageHeader } from '@/app/ui/dashboard/page-header';
+
 export default async function Page() {
     const session = await auth();
     const userEmail = session?.user?.email;
@@ -23,15 +25,17 @@ export default async function Page() {
 
     return (
         <div className="w-full">
-            <div className="flex w-full items-center justify-between">
-                <h1 className="text-2xl font-bold text-foreground">My Bookings</h1>
+            <PageHeader
+                title="My Bookings"
+                subtitle="View and manage your resource reservations and request status."
+            >
                 <Link href="/user/bookings/create">
-                    <Button className="flex items-center gap-2">
+                    <Button className="flex items-center gap-2 shadow-lg shadow-primary/20">
                         <PlusIcon className="h-4 w-4" />
-                        New Booking
+                        <span>New Booking</span>
                     </Button>
                 </Link>
-            </div>
+            </PageHeader>
 
             <div className="mt-8 flow-root">
                 <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
@@ -48,6 +52,11 @@ export default async function Page() {
                                     }`}>
                                     {(booking.status || 'pending').toUpperCase()}
                                 </div>
+                                {booking.event_name && (
+                                    <h4 className="text-primary text-xs font-bold uppercase tracking-wider mb-1">
+                                        {booking.event_name}
+                                    </h4>
+                                )}
                                 <h3 className="font-semibold text-lg mb-2">{booking.resources.resource_name}</h3>
                                 <div className="space-y-2 text-sm text-muted-foreground">
                                     <div className="flex items-center gap-2">

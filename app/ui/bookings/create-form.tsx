@@ -4,7 +4,7 @@ import { createBooking } from '@/app/lib/booking-actions';
 import { Button } from '@/app/ui/button';
 import Link from 'next/link';
 import { useActionState, useState, useEffect } from 'react';
-import { CalendarIcon, ClockIcon } from 'lucide-react';
+import { CalendarIcon, ClockIcon, ChevronDownIcon } from 'lucide-react';
 import { useToast } from '@/app/ui/toast';
 import { useRouter } from 'next/navigation';
 
@@ -29,6 +29,11 @@ export default function BookingForm({ resources, initialResourceId }: { resource
     const [start, setStart] = useState('');
     const [end, setEnd] = useState('');
 
+    // Track selected resource for maintenance warning
+    const [selectedResourceId, setSelectedResourceId] = useState(initialResourceId || '');
+    const selectedResource = resources.find((r: any) => String(r.resource_id) === String(selectedResourceId));
+    const isUnderMaintenance = selectedResource?.is_active === false;
+
     return (
         <form action={dispatch} className="rounded-xl bg-card p-6 shadow-sm border border-border">
             {/* Resource */}
@@ -40,19 +45,29 @@ export default function BookingForm({ resources, initialResourceId }: { resource
                     <select
                         id="resource_id"
                         name="resource_id"
-                        className="peer block w-full cursor-pointer rounded-lg border border-input bg-background py-3 px-4 text-sm outline-none transition-all focus:border-primary focus:ring-2 focus:ring-primary/20"
+                        className="peer block w-full appearance-none cursor-pointer rounded-lg border border-input bg-background py-3 px-4 text-sm outline-none transition-all focus:border-primary focus:ring-2 focus:ring-primary/20"
                         defaultValue={initialResourceId || ""}
                         required
                         aria-describedby="resource-error"
+                        onChange={(e) => setSelectedResourceId(e.target.value)}
                     >
                         <option value="" disabled>Choose a resource...</option>
-                        {resources.map((res) => (
+                        {resources.map((res: any) => (
                             <option key={res.resource_id} value={res.resource_id}>
                                 {res.resource_name} ({res.buildings.building_name})
                             </option>
                         ))}
                     </select>
+                    <ChevronDownIcon className="pointer-events-none absolute right-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-muted-foreground" />
                 </div>
+                {isUnderMaintenance && (
+                    <div className="mt-2 flex items-center gap-2 rounded-lg bg-destructive/10 border border-destructive/20 px-3 py-2 text-sm text-destructive">
+                        <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 flex-shrink-0" viewBox="0 0 20 20" fill="currentColor">
+                            <path fillRule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clipRule="evenodd" />
+                        </svg>
+                        <span>This resource is currently under maintenance and cannot be booked. Please select a different resource.</span>
+                    </div>
+                )}
                 {state.errors?.resource_id && (
                     <div id="resource-error" aria-live="polite" className="mt-2 text-sm text-red-500">
                         {state.errors.resource_id.map((error: string) => (
