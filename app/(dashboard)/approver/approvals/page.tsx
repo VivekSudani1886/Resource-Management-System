@@ -18,7 +18,7 @@ export default async function Page() {
                             No pending approvals.
                         </div>
                     ) : (
-                        bookings.map((booking) => (
+                        bookings.map((booking: any) => (
                             <div key={booking.booking_id} className="rounded-xl border bg-card text-card-foreground shadow-sm p-6 flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
                                 <div className="space-y-1">
                                     <h3 className="font-semibold text-lg">{booking.resources.resource_name}</h3>

@@ -19,7 +19,7 @@ export default async function ResourceGrid({ query }: { query: string }) {
 
     return (
         <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 mt-6">
-            {resources.map((resource) => (
+            {resources.map((resource: any) => (
                 <div key={resource.resource_id} className="group relative flex flex-col overflow-hidden rounded-xl bg-card border border-border shadow-sm transition-all hover:shadow-lg hover:border-primary/50">
                     {/* Header with icon and status */}
                     <div className="p-6 pb-4 border-b border-border/50">

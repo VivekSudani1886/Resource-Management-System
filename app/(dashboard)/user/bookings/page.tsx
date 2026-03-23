@@ -44,7 +44,7 @@ export default async function Page() {
                             No bookings found. Start by creating one!
                         </div>
                     ) : (
-                        bookings.map((booking) => (
+                        bookings.map((booking: any) => (
                             <div key={booking.booking_id} className="rounded-xl border bg-card text-card-foreground shadow-sm p-6 relative overflow-hidden">
                                 <div className={`absolute top-0 right-0 px-3 py-1 text-xs font-semibold rounded-bl-lg ${(booking.status || 'pending') === 'approved' ? 'bg-green-100 text-green-700' :
                                     (booking.status || 'pending') === 'rejected' ? 'bg-red-100 text-red-700' :

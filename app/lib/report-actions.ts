@@ -57,7 +57,7 @@ export async function fetchResourceUtilization() {
         });
 
         const resources = await Promise.all(
-            resourceCounts.map(async (item) => {
+            resourceCounts.map(async (item: any) => {
                 const resource = await prisma.resources.findUnique({
                     where: { resource_id: item.resource_id },
                     select: { resource_name: true, resource_types: { select: { type_name: true } } },

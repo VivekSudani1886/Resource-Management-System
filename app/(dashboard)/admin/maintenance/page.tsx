@@ -35,7 +35,7 @@ export default async function Page() {
                             </tr>
                         </thead>
                         <tbody className="divide-y divide-border/50">
-                            {tasks.map((task) => (
+                            {tasks.map((task: any) => (
                                 <tr key={task.maintenance_id} className="hover:bg-muted/10 transition-colors">
                                     <td className="px-6 py-4 font-medium">{task.resources.resource_name}</td>
                                     <td className="px-6 py-4">{task.maintenance_type}</td>

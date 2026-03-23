@@ -5,10 +5,10 @@ import MaintenanceDetailsModal from '@/app/ui/maintenance/maintenance-details-mo
 
 export default async function Page() {
     const allRequests = await fetchMaintenanceRequests();
-    const completedRequests = allRequests.filter(req => req.status === 'completed' || req.status === 'cancelled');
+    const completedRequests = allRequests.filter((req: any) => req.status === 'completed' || req.status === 'cancelled');
 
     // Sort recent first
-    completedRequests.sort((a, b) => new Date(b.scheduled_date).getTime() - new Date(a.scheduled_date).getTime());
+    completedRequests.sort((a: any, b: any) => new Date(b.scheduled_date).getTime() - new Date(a.scheduled_date).getTime());
 
     return (
         <div className="w-full space-y-6">
@@ -20,7 +20,7 @@ export default async function Page() {
                         <p>No historical maintenance records found.</p>
                     </div>
                 ) : (
-                    completedRequests.map((req) => (
+                    completedRequests.map((req: any) => (
                         <Card key={req.maintenance_id} className="opacity-80 hover:opacity-100 transition-opacity">
                             <CardHeader className="flex flex-row items-center gap-4 pb-2">
                                 <div className={`p-2 rounded-full ${req.status === 'completed'

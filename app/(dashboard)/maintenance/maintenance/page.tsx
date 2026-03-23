@@ -24,7 +24,7 @@ export default async function Page() {
     const maintenanceRequests = await fetchMaintenanceRequests();
 
     // Sort so pending ones are first
-    maintenanceRequests.sort((a, b) => {
+    maintenanceRequests.sort((a: any, b: any) => {
         if (a.status === 'scheduled' && b.status !== 'scheduled') return -1;
         if (a.status !== 'scheduled' && b.status === 'scheduled') return 1;
         return new Date(b.scheduled_date).getTime() - new Date(a.scheduled_date).getTime();
@@ -49,7 +49,7 @@ export default async function Page() {
                         <p>All systems operational. No maintenance requests found.</p>
                     </div>
                 ) : (
-                    maintenanceRequests.map((req) => (
+                    maintenanceRequests.map((req: any) => (
                         <div key={req.maintenance_id} className={`rounded-xl border p-6 flex flex-col md:flex-row items-center justify-between gap-4 transition-colors ${req.status === 'completed'
                             ? 'bg-card border-border opacity-75'
                             : 'border-orange-200 bg-orange-50/50 dark:bg-orange-950/20 dark:border-orange-900'
