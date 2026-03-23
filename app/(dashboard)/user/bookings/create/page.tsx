@@ -30,7 +30,7 @@ export default async function Page({
                         </div>
                     </div>
                     <div className="divide-y divide-border">
-                        {underMaintenance.map(resource => {
+                        {underMaintenance.map((resource: any) => {
                             const latestMaintenance = resource.maintenance?.[0];
                             return (
                                 <div key={resource.resource_id} className="flex items-start gap-4 px-5 py-4">

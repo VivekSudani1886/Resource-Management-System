@@ -29,7 +29,7 @@ export default async function Page() {
                             </tr>
                         </thead>
                         <tbody className="divide-y divide-border/50">
-                            {bookings.map((booking) => (
+                            {bookings.map((booking: any) => (
                                 <tr key={booking.booking_id} className="hover:bg-muted/10 transition-colors">
                                     <td className="px-6 py-4 font-medium">
                                         {booking.event_name || <span className="text-muted-foreground italic text-xs">No event</span>}

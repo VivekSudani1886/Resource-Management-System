@@ -32,7 +32,7 @@ export default async function UsersTable({ query }: { query: string }) {
                             </tr>
                         </thead>
                         <tbody className="divide-y divide-border/50 bg-card">
-                            {users.map((user) => (
+                            {users.map((user: any) => (
                                 <tr key={user.user_id} className="hover:bg-muted/30 transition-colors group">
                                     <td className="px-6 py-4">
                                         <div className="flex items-center gap-3">

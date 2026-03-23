@@ -32,7 +32,7 @@ export default async function Page() {
                                 </tr>
                             </thead>
                             <tbody className="divide-y divide-border/50">
-                                {approvals.map((booking) => (
+                                {approvals.map((booking: any) => (
                                     <tr key={booking.booking_id} className="hover:bg-muted/10 transition-colors">
                                         <td className="px-6 py-4 font-medium">{booking.resources.resource_name}</td>
                                         <td className="px-6 py-4">{booking.users_bookings_user_idTousers.name}</td>

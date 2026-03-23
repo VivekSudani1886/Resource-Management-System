@@ -11,7 +11,7 @@ export default async function Page() {
             </div>
 
             <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-                {resources.map((resource) => (
+                {resources.map((resource: any) => (
                     <Card key={resource.resource_id} className={!resource.is_active ? 'border-orange-200 bg-orange-50/20' : ''}>
                         <CardHeader className="pb-2">
                             <div className="flex justify-between items-start">

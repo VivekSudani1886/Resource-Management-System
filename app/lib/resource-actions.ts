@@ -121,7 +121,7 @@ export async function createResource(prevState: any, formData: FormData) {
             },
         });
 
-        const existingResource = existingResources.find(r => r.resource_name.toLowerCase() === resource_name.toLowerCase());
+        const existingResource = existingResources.find((r: any) => r.resource_name.toLowerCase() === resource_name.toLowerCase());
 
         if (existingResource) {
             return {
@@ -190,7 +190,7 @@ export async function updateResource(id: number, prevState: any, formData: FormD
                 },
             },
         });
-        const existingResource = existingResources.find(r => resource_name && r.resource_name.toLowerCase() === resource_name.toLowerCase());
+        const existingResource = existingResources.find((r: any) => resource_name && r.resource_name.toLowerCase() === resource_name.toLowerCase());
 
         if (existingResource) {
             return {
@@ -252,7 +252,7 @@ export async function createResourceType(prevState: any, formData: FormData) {
 
     try {
         const existingTypes = await prisma.resource_types.findMany();
-        const existingType = existingTypes.find(t => t.type_name.toLowerCase() === type_name.toLowerCase());
+        const existingType = existingTypes.find((t: any) => t.type_name.toLowerCase() === type_name.toLowerCase());
 
         if (existingType) {
             return {
@@ -304,7 +304,7 @@ export async function createBuilding(prevState: any, formData: FormData) {
 
     try {
         const existingBuildings = await prisma.buildings.findMany();
-        const existingBuilding = existingBuildings.find(b => b.building_number.toLowerCase() === building_number.toLowerCase());
+        const existingBuilding = existingBuildings.find((b: any) => b.building_number.toLowerCase() === building_number.toLowerCase());
 
         if (existingBuilding) {
             return {
