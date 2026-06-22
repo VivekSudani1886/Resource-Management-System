@@ -81,7 +81,7 @@ export async function createBooking(prevState: any, formData: FormData) {
         resource_id: formData.get('resource_id'),
         start_datetime: formData.get('start_datetime'),
         end_datetime: formData.get('end_datetime'),
-        event_name: formData.get('event_name'),
+        event_name: formData.get('event_name') || undefined,
     });
 
     if (!validatedFields.success) {

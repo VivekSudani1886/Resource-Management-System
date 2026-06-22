@@ -129,6 +129,30 @@ export default function BookingForm({ resources, initialResourceId }: { resource
                 </div>
             </div>
 
+            {/* Event Name */}
+            <div className="mb-6">
+                <label htmlFor="event_name" className="mb-2 block text-sm font-medium text-foreground">
+                    Event Name (Optional)
+                </label>
+                <div className="relative">
+                    <input
+                        id="event_name"
+                        name="event_name"
+                        type="text"
+                        placeholder="e.g. Project Sync, Team Lunch, Workshop"
+                        className="peer block w-full rounded-lg border border-input bg-background py-3 px-4 text-sm outline-none transition-all focus:border-primary focus:ring-2 focus:ring-primary/20"
+                        aria-describedby="event-name-error"
+                    />
+                </div>
+                {state.errors?.event_name && (
+                    <div id="event-name-error" aria-live="polite" className="mt-2 text-sm text-red-500">
+                        {state.errors.event_name.map((error: string) => (
+                            <p key={error}>{error}</p>
+                        ))}
+                    </div>
+                )}
+            </div>
+
             <div className="flex items-center justify-end gap-3 pt-6 border-t border-border/50">
                 <div aria-live="polite" className="flex-1">
                     {state.message && (
