@@ -24,6 +24,7 @@ export default async function Page() {
                             <thead className="bg-muted/50 text-xs uppercase text-muted-foreground">
                                 <tr>
                                     <th className="px-6 py-4">Resource</th>
+                                    <th className="px-6 py-4">Event Name</th>
                                     <th className="px-6 py-4">User</th>
                                     <th className="px-6 py-4">Date & Time</th>
                                     <th className="px-6 py-4">Status</th>
@@ -35,6 +36,9 @@ export default async function Page() {
                                 {approvals.map((booking: any) => (
                                     <tr key={booking.booking_id} className="hover:bg-muted/10 transition-colors">
                                         <td className="px-6 py-4 font-medium">{booking.resources.resource_name}</td>
+                                        <td className="px-6 py-4">
+                                            {booking.event_name || <span className="text-muted-foreground/50 italic text-xs">No Event</span>}
+                                        </td>
                                         <td className="px-6 py-4">{booking.users_bookings_user_idTousers.name}</td>
                                         <td className="px-6 py-4">
                                             {new Date(booking.start_datetime).toLocaleDateString()} <br />
@@ -86,6 +90,7 @@ export default async function Page() {
                                                         </button>
                                                     </form>
                                                 )}
+
                                                 <BookingDetailsModal booking={booking as any} iconOnly />
                                             </div>
                                         </td>

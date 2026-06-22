@@ -21,7 +21,14 @@ export default async function Page() {
                         bookings.map((booking: any) => (
                             <div key={booking.booking_id} className="rounded-xl border bg-card text-card-foreground shadow-sm p-6 flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
                                 <div className="space-y-1">
-                                    <h3 className="font-semibold text-lg">{booking.resources.resource_name}</h3>
+                                    <h3 className="font-semibold text-lg">
+                                        {booking.resources.resource_name}
+                                        {booking.event_name && (
+                                            <span className="ml-2 px-2 py-0.5 text-xs font-normal text-muted-foreground bg-muted rounded-md border">
+                                                {booking.event_name}
+                                            </span>
+                                        )}
+                                    </h3>
                                     <div className="flex flex-col sm:flex-row gap-2 sm:gap-4 text-sm text-muted-foreground">
                                         <div className="flex items-center gap-1">
                                             <UserIcon className="h-4 w-4" />
