@@ -25,12 +25,11 @@ export default function BookingForm({ resources, initialResourceId }: { resource
         }
     }, [state, showToast, router]);
 
-    // Simple controlled inputs for datetime validation hint could be added here
     const [start, setStart] = useState('');
     const [end, setEnd] = useState('');
-
-    // Track selected resource for maintenance warning
     const [selectedResourceId, setSelectedResourceId] = useState(initialResourceId || '');
+    const [eventName, setEventName] = useState('');
+
     const selectedResource = resources.find((r: any) => String(r.resource_id) === String(selectedResourceId));
     const isUnderMaintenance = selectedResource?.is_active === false;
 
@@ -46,7 +45,7 @@ export default function BookingForm({ resources, initialResourceId }: { resource
                         id="resource_id"
                         name="resource_id"
                         className="peer block w-full appearance-none cursor-pointer rounded-lg border border-input bg-background py-3 px-4 text-sm outline-none transition-all focus:border-primary focus:ring-2 focus:ring-primary/20"
-                        defaultValue={initialResourceId || ""}
+                        value={selectedResourceId}
                         required
                         aria-describedby="resource-error"
                         onChange={(e) => setSelectedResourceId(e.target.value)}
@@ -89,6 +88,7 @@ export default function BookingForm({ resources, initialResourceId }: { resource
                             name="start_datetime"
                             type="datetime-local"
                             className="peer block w-full rounded-lg border border-input bg-background py-3 px-4 text-sm outline-none transition-all focus:border-primary focus:ring-2 focus:ring-primary/20"
+                            value={start}
                             required
                             aria-describedby="start-error"
                             onChange={(e) => setStart(e.target.value)}
@@ -113,6 +113,7 @@ export default function BookingForm({ resources, initialResourceId }: { resource
                             name="end_datetime"
                             type="datetime-local"
                             className="peer block w-full rounded-lg border border-input bg-background py-3 px-4 text-sm outline-none transition-all focus:border-primary focus:ring-2 focus:ring-primary/20"
+                            value={end}
                             required
                             aria-describedby="end-error"
                             onChange={(e) => setEnd(e.target.value)}
@@ -141,7 +142,9 @@ export default function BookingForm({ resources, initialResourceId }: { resource
                         type="text"
                         placeholder="e.g. Project Sync, Team Lunch, Workshop"
                         className="peer block w-full rounded-lg border border-input bg-background py-3 px-4 text-sm outline-none transition-all focus:border-primary focus:ring-2 focus:ring-primary/20"
+                        value={eventName}
                         aria-describedby="event-name-error"
+                        onChange={(e) => setEventName(e.target.value)}
                     />
                 </div>
                 {state.errors?.event_name && (

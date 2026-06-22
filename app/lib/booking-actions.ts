@@ -65,7 +65,6 @@ export async function createBooking(prevState: any, formData: FormData) {
     const user = await prisma.users.findUnique({ where: { email: session.user.email } });
     if (!user) return { message: 'User not found' };
 
-    // Check for maintenance BEFORE field validation so the user gets a specific message
     const rawResourceId = Number(formData.get('resource_id'));
     if (rawResourceId && rawResourceId > 0) {
         const resourceCheck = await prisma.resources.findUnique({
@@ -142,7 +141,7 @@ export async function createBooking(prevState: any, formData: FormData) {
                 start_datetime: new Date(start_datetime),
                 end_datetime: new Date(end_datetime),
                 event_name: event_name,
-                status: 'pending', // Default to pending
+                status: 'pending',
                 created_at: new Date(),
             },
             include: { resources: true }

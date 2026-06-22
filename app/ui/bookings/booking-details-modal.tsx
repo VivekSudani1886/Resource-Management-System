@@ -13,6 +13,7 @@ interface BookingDetailsModalProps {
         end_datetime: string | Date;
         created_at: string | Date | null;
         approved_at?: string | Date | null;
+        event_name?: string | null;
         resources: {
             resource_name: string;
             buildings: {
@@ -90,6 +91,13 @@ export default function BookingDetailsModal({ booking, iconOnly = false }: Booki
                                     {booking.status || 'Pending'}
                                 </div>
                             </div>
+
+                            {booking.event_name && (
+                                <div className="bg-muted/50 border rounded-xl p-4">
+                                    <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-1">Event Name</p>
+                                    <p className="font-semibold text-foreground text-sm">{booking.event_name}</p>
+                                </div>
+                            )}
 
                             <div className="space-y-4">
                                 <div className="grid grid-cols-[24px_1fr] gap-3 items-start">
